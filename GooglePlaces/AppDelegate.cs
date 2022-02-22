@@ -1,4 +1,5 @@
 ﻿using Foundation;
+using Google.Places;
 using UIKit;
 
 namespace GooglePlaces
@@ -8,6 +9,7 @@ namespace GooglePlaces
     [Register("AppDelegate")]
     public class AppDelegate : UIResponder, IUIApplicationDelegate
     {
+        public static string GOOGLE_API_KEY = "please_provide_key";
 
         [Export("window")]
         public UIWindow Window { get; set; }
@@ -17,25 +19,16 @@ namespace GooglePlaces
         {
             // Override point for customization after application launch.
             // If not required for your application you can safely delete this method
+
+            PlacesClient.ProvideApiKey(GOOGLE_API_KEY);
+
+            Window = new UIWindow()
+            {
+                RootViewController = new PlacesViewController(PlacesClient.SharedInstance)
+            };
+            Window.MakeKeyAndVisible();
+
             return true;
-        }
-
-        // UISceneSession Lifecycle
-
-        [Export("application:configurationForConnectingSceneSession:options:")]
-        public UISceneConfiguration GetConfiguration(UIApplication application, UISceneSession connectingSceneSession, UISceneConnectionOptions options)
-        {
-            // Called when a new scene session is being created.
-            // Use this method to select a configuration to create the new scene with.
-            return UISceneConfiguration.Create("Default Configuration", connectingSceneSession.Role);
-        }
-
-        [Export("application:didDiscardSceneSessions:")]
-        public void DidDiscardSceneSessions(UIApplication application, NSSet<UISceneSession> sceneSessions)
-        {
-            // Called when the user discards a scene session.
-            // If any sessions were discarded while the application was not running, this will be called shortly after `FinishedLaunching`.
-            // Use this method to release any resources that were specific to the discarded scenes, as they will not return.
         }
     }
 }
